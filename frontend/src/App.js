@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import TaskList from "./TaskList";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -9,20 +10,15 @@ function App() {
       .then((data) => setTasks(data))
       .catch((err) => console.error("Failed to fetch tasks:", err));
   }, []);
-
    return (
-    <div>
+    <div className="App">
       <h1>To-Do Manager</h1>
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <strong>{task.title}</strong> - {task.completed ? "✅ Done" : "❌ Not done"}
-          </li>
-        ))}
-      </ul>
+      <TaskList tasks={tasks} />
     </div>
   );
 }
 
+
+ 
 
 export default App;
