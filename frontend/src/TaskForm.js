@@ -1,28 +1,31 @@
 import { useState } from "react";
 
-function TaskForm () {
+function TaskForm ({ onAddTask }) {
     const [title, setTitle] = useState("");
     function handleSubmit(e) {
-        e.preventDefault()
+        e.preventDefault();
         const newTask = {
             title,
             completed: false
-        }
+        };
 
-        fetch("http://localhost:3000/tasks"), 
+        fetch("http://localhost:3000/tasks", 
         {
             method: "POST",
             headers: {
                 "Content-Type" :"application/json"
             },
-            body:JSON.stringify(newTask)
-        }
-      .then((res) => res.json())
-      .then((data) => {
-        onAddTask(data);
-        setTitle(""); 
-      });
-  }
+            body: JSON.stringify(newTask)
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            onAddTask(data);
+            setTitle(""); 
+        })
+        .catch((error) => {
+            console.error("Error adding task:", error);
+        });
+    }
 
   return (
     <form onSubmit={handleSubmit}>
