@@ -4,8 +4,12 @@ function TaskForm ({ onAddTask }) {
     const [title, setTitle] = useState("");
     function handleSubmit(e) {
         e.preventDefault();
+        const trimmedTitle = title.trim();
+        if (!trimmedTitle) {
+            return;
+        }
         const newTask = {
-            title,
+            title: trimmedTitle,
             completed: false
         };
 
@@ -42,4 +46,3 @@ function TaskForm ({ onAddTask }) {
 }
 
 export default TaskForm;
-    

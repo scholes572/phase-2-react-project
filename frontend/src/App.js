@@ -13,7 +13,18 @@ function App() {
   }, []);
 
   const handleAddTask = (newTask) => {
-    setTasks((prevTasks) => [...prevTasks, newTask]);
+    fetch("http://localhost:3000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTask),
+    })
+      .then((res) => res.json())
+      .then((createdTask) => {
+        setTasks((prevTasks) => [...prevTasks, createdTask]);
+      })
+      .catch((err) => console.error("Failed to add task:", err));
   };
 
   const handleToggleTask = (id, newCompletedStatus) => {
@@ -33,11 +44,26 @@ function App() {
       });
   };
 
+  const handleDeleteTask = (id) => {
+    fetch(`http://localhost:3000/tasks/${id}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        const updatedTasks = tasks.filter((task) => task.id !== id);
+        setTasks(updatedTasks);
+      })
+      .catch((err) => console.error("Failed to delete task:", err));
+  };
+
   return (
     <div className="App">
       <h1>To-Do Manager</h1>
       <TaskForm onAddTask={handleAddTask} />
-      <TaskList tasks={tasks} onToggleTask={handleToggleTask} />
+      <TaskList
+        tasks={tasks}
+        onToggleTask={handleToggleTask}
+        onDeleteTask={handleDeleteTask}
+      />
     </div>
   );
 }
